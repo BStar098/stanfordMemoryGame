@@ -10,7 +10,10 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards : Array<Card>
     
-    private var onlyFaceUpCardIndex : Int?
+    private var onlyFaceUpCardIndex : Int? {
+        get {cards.indices.filter({cards[$0].isFaceUp}).oneAndOnly}
+        set {cards.indices.forEach{cards[$0].isFaceUp = $0==newValue }}
+    }
     
     mutating func choose(_ card: Card){
         if let chosenCardIndex = cards.firstIndex(where: {$0.id == card.id}),
@@ -22,14 +25,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[potentialMatchIndex].isMatched = true
                     cards[chosenCardIndex].isMatched = true
                 }
-                onlyFaceUpCardIndex = nil
+                cards[chosenCardIndex].isFaceUp = true
+
             } else {
-                onlyFaceUpCardIndex = chosenCardIndex;
-                for index in cards.indices {
-                    cards[index].isFaceUp = false
-                }
+                onlyFaceUpCardIndex = chosenCardIndex
+               
             }
-            cards[chosenCardIndex].isFaceUp.toggle()
 
         }
     }
@@ -55,5 +56,17 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         let content:CardContent
         let id: Int
     }
+
     
+  
+}
+
+extension Array {
+    var oneAndOnly:Element? {
+        if(self.count==1){
+            return self.first
+        } else {
+            return nil
+        }
+    }
 }
