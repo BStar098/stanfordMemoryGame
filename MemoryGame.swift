@@ -26,18 +26,17 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     cards[chosenCardIndex].isMatched = true
                 }
                 cards[chosenCardIndex].isFaceUp = true
-
             } else {
                 onlyFaceUpCardIndex = chosenCardIndex
-               
             }
-
         }
     }
+    
     
     mutating func shuffle(){
         cards.shuffle()
     }
+    
     
     init (numberOfPairsOfCards:Int, createCardContent: (Int) -> CardContent){
         cards = Array<Card>()

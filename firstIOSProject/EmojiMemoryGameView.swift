@@ -10,58 +10,62 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     @ObservedObject var game:EmojiMemoryGame;
     var body: some View {
-        VStack{
-            ScrollView
-            {
-                LazyVGrid(columns:[GridItem(.adaptive(minimum:80))]){
-                    ForEach( game.cards) {card in
-                        CardView(card: card)
-                            .aspectRatio(2/3,contentMode:.fit)
-                            .onTapGesture{
-                                game.choose(card)
-                            }
+        
+        AspectVGrid(items:game.cards, aspectRatio: 2/3) { card in
+            if card.isMatched && !card.isFaceUp {
+                Rectangle().opacity(0)
+            } else {
+                CardView(card: card)
+                    .padding(4)
+                    .onTapGesture{
+                        game.choose(card)
                     }
+            }
+        }.foregroundColor(.red).padding(.horizontal)
+        
+        }
+  
+    }
+ 
+
+
+
+struct CardView : View {
+    let card: EmojiMemoryGame.Card
+    
+    var body : some View{
+        GeometryReader { geometry in
+            ZStack(){
+                let shape = RoundedRectangle(cornerRadius: drawingConstants.borderRadius)
+                if(card.isFaceUp){
+                    shape.fill().foregroundColor(.white)
+                    shape.strokeBorder(lineWidth: drawingConstants.lineWidth)
+                    Text(card.content).font(font(size: geometry.size))
+                } else if (card.isMatched){ shape.opacity(0) }
+                else {
+                    Text(card.content).font(.title)
+                    shape.fill()
                 }
-            }.foregroundColor(.red)
-                .padding(.horizontal)
-            Button("Shuffle") {
-                game.shuffle()
             }
         }
+    }
+    
+    private func font(size: CGSize) -> Font {
+        Font.system(size: min(size.width, size.height) * drawingConstants.contentScaling)
+    }
+    
+    //We put the constants here so we can reuse them throughout the codebase
+    private struct drawingConstants {
+        static let borderRadius : CGFloat = 10
+        static let lineWidth : CGFloat = 3
+        static let contentScaling : CGFloat = 0.75
     }
     
 }
 
-    struct CardView : View {
-        let card: EmojiMemoryGame.Card
-        
-        var body : some View{
-            ZStack(){
-                let shape = RoundedRectangle(cornerRadius:25)
-                if(card.isFaceUp){
-                    shape.fill().foregroundColor(.white)
-                    shape.strokeBorder(lineWidth:5)
-                    Text(card.content).font(.title)
-                } else if (card.isMatched){
-                    shape.opacity(0)
-                }
-                else {
-                    Text(card.content).font(.title)
-                    shape.fill()
+    
+    
 
-                }
-                
-            }
-            
-            
-        }
-    }
-
-    
-    
-    
-    
-    
     
 
     
