@@ -19,6 +19,7 @@ struct EmojiMemoryGameView: View {
                     .padding(4)
                     .onTapGesture{
                         game.choose(card)
+
                     }
             }
         }.foregroundColor(.red).padding(.horizontal)
@@ -63,10 +64,6 @@ struct CardView : View {
     
 }
 
-    
-    
-
-    
 
     
     struct ContentView_Previews: PreviewProvider {
