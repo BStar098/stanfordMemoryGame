@@ -32,6 +32,8 @@ class EmojiMemoryGame : ObservableObject {
     }
     
     func shuffle(){
-        model.shuffle()
+            model.shuffle()
+        
     }
+    
 }

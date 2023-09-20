@@ -37,7 +37,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards.shuffle()
     }
     
-    
     init (numberOfPairsOfCards:Int, createCardContent: (Int) -> CardContent){
         cards = Array<Card>()
         // add numberOfPairsOfCards x2 cards to cards array
